@@ -1,8 +1,8 @@
 from flask import Flask, render_template
-app = Flask(__name__)
+app = Flask(__name__) # Создание приложение. Так у нас flask знает где искать ресурсы(шаблоны и статические файлы)
 
 
-@app.route("/")
+@app.route("/") # декоратор, чтобы сообщить Flask, какой URL должен вызывать нашу функцию.
 def index():
     return render_template('index.html')
 
@@ -24,5 +24,5 @@ def login():
 
 
 
-if __name__ == '__main__':
+if __name__ == '__main__': # Делаем так, чтобы у нас всё автоматически подтягивалось при изменении чего либо
     app.run(debug=True)
