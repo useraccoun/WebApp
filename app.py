@@ -23,6 +23,11 @@ def login():
     return render_template('login.html')
 
 
+@app.route("/register.html")
+def register():
+    return render_template('register.html')
+
+
 
 if __name__ == '__main__': # Делаем так, чтобы у нас всё автоматически подтягивалось при изменении чего либо
     app.run(debug=True)

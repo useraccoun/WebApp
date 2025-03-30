@@ -9,14 +9,13 @@
 
 {% block title %}
 
-Личный кабинет
+
 
 {% endblock %}
 
 
 {% block body %}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/login.css') }}">
-
 
 <form action="#">
       <div>
@@ -37,28 +36,26 @@
               </g>
             </svg>
         </label>
-        <input type="password" name="name" id="name" placeholder="">
+        <input type="password" name="name" id="name" placeholder="password">
       </div>
+          <div>
+      <label class="lock" for="check_password">
+        <svg viewBox="0 0 32 32">
+          <g filter="">
+            <use xlink:href="#lock-locker"></use>
+           </g>
+          </svg>
+      </label>
+      <input type="password" name="name" id="name" placeholder="confirm password">
+    </div>
      <div>
       <input type="submit" value="Sign in">
     </div>
-<!--      <span class="forgot-label">Registration</span>-->
-        <li class="forgot-label"><a class="forgot-label" href="{{ url_for('register') }}">Registration</a></li>
-      <div class="clear"></div>
+
 </form>
 
 
 
-
-
-
 {% endblock %}
-
-
-
-
-
-
-
 
 
