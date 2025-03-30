@@ -17,16 +17,16 @@
 {% block body %}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/login.css') }}">
 
-<form action="#">
+<form action='/register_handler' method="post" autocomplete="off">
       <div>
-         <label class="user" for="text">
+         <label class="user" for="username">
            <svg viewBox="0 0 32 32">
                     <g filter="">
                       <use xlink:href="#man-people-user"></use>
                     </g>
                   </svg>
          </label>
-        <input class="user-input" type="text" name="name" id="name" placeholder="My name is">
+        <input class="user-input" type="text" name="username" placeholder="My name is">
       </div>
       <div>
         <label class="lock" for="password">
@@ -36,17 +36,17 @@
               </g>
             </svg>
         </label>
-        <input type="password" name="name" id="name" placeholder="password">
+        <input type="password" name="password" placeholder="password">
       </div>
           <div>
-      <label class="lock" for="check_password">
+      <label class="lock" for="password">
         <svg viewBox="0 0 32 32">
           <g filter="">
             <use xlink:href="#lock-locker"></use>
            </g>
           </svg>
       </label>
-      <input type="password" name="name" id="name" placeholder="confirm password">
+      <input type="password" name="check_password" placeholder="confirm password">
     </div>
      <div>
       <input type="submit" value="Sign in">
