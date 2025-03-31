@@ -51,7 +51,7 @@ def login_hand():
 
     db = SQLighter('data.db')
 
-    if db.autorize_user(username, password):
+    if db.autorize_user(username, password): #
         return redirect('/profile.html')
     else:
         return redirect('/login.html')
