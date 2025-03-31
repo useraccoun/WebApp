@@ -27,12 +27,12 @@ def register():
     return render_template('register.html')
 
 
-@app.route('/register_handler', methods = ['POST'])
+@app.route('/register_handler', methods = ['POST']) # Напрямую связываемся с front, '/register_handler' - это обработчик(action) в register.html. С methods идентичная ситуация
 def reg_hand():
-    username = request.form['username']
+    username = request.form['username'] #Здесь мы возвращаем данные полей переданной HTML-формы. То есть 'username' - это обращение к фронту(кнопка email)
     password = request.form['password']
     check_password = request.form['check_password']
-    print(username, password, check_password)
+    print(username, password, check_password) # Это проверка, что запросы будут отображаться в консоли
 
 
 if __name__ == '__main__': # Делаем так, чтобы у нас всё автоматически подтягивалось при изменении чего либо
