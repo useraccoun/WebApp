@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request
+from models import SQLighter
 app = Flask(__name__) # Создание приложение. Так у нас flask знает где искать ресурсы(шаблоны и статические файлы)
 
 
@@ -33,7 +34,14 @@ def reg_hand():
     password = request.form['password']
     check_password = request.form['check_password']
     print(username, password, check_password) # Это проверка, что запросы будут отображаться в консоли
-
+    if password == check_password:
+        db=SQLighter('data.db')
+        db.add_user(username,password)
+        return redirect('/profile.html')
+        # return ' Получилось отправить'
+    else:
+          return redirect('/login.html')
+        #  return 'Не получилось отправить'
 
 if __name__ == '__main__': # Делаем так, чтобы у нас всё автоматически подтягивалось при изменении чего либо
     app.run(debug=True)
