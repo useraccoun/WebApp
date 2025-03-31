@@ -9,13 +9,10 @@ class SQLighter:
     
     def _create_table(self):
         """Создание таблицы users если она не существует"""
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                login TEXT UNIQUE NOT NULL,
-                password TEXT NOT NULL
-            )
-        """)
+        self.cursor.execute("""CREATE TABLE IF NOT EXISTS users 
+                            (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            login TEXT UNIQUE NOT NULL,
+                            password TEXT NOT NULL)""")
         self.connection.commit()
     
     def add_user(self, login, password):

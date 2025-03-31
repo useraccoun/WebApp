@@ -36,7 +36,7 @@ def reg_hand():
     print(username, password, check_password) # Это проверка, что запросы будут отображаться в консоли
     if password == check_password:
         db=SQLighter('data.db')
-        db.add_user(username,password)
+        db.add_user(username, password)
         return redirect('/profile.html')
         # return ' Получилось отправить'
     else:
