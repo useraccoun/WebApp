@@ -2,7 +2,6 @@ from flask import Flask, redirect, render_template, request
 from models import SQLighter
 app = Flask(__name__) # Создание приложение. Так у нас flask знает где искать ресурсы(шаблоны и статические файлы)
 
-
 @app.route("/") # декоратор, чтобы сообщить Flask, какой URL должен вызывать нашу функцию.
 def index():
     return render_template('index.html')
@@ -35,13 +34,28 @@ def reg_hand():
     check_password = request.form['check_password']
     print(username, password, check_password) # Это проверка, что запросы будут отображаться в консоли
     if password == check_password:
-        db=SQLighter('data.db')
+        db=SQLighter('data.db') # Обращение к базе данных, а именно к файлу models.py
         db.add_user(username, password)
         return redirect('/profile.html')
         # return ' Получилось отправить'
     else:
           return redirect('/login.html')
         #  return 'Не получилось отправить'
+
+
+@app.route('/login_handler', methods = ['POST'])
+def login_hand():
+    username = request.form['username']
+    password = request.form['password']
+    print(username, password)
+
+    db = SQLighter('data.db')
+
+    if db.autorize_user(username, password):
+        return redirect('/profile.html')
+    else:
+        return redirect('/login.html')
+
 
 if __name__ == '__main__': # Делаем так, чтобы у нас всё автоматически подтягивалось при изменении чего либо
     app.run(debug=True)
