@@ -1,6 +1,19 @@
-from flask import Flask, redirect, render_template, request
-from models import SQLighter
+from flask import Flask, redirect, render_template, request, session
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__) # Создание приложение. Так у нас flask знает где искать ресурсы(шаблоны и статические файлы)
+app.secret_key = "super_secret_key"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tracker.db'
+db = SQLAlchemy(app) # Оборачиваем наше приложение в класс SQLAlchemy
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    login = db.Column(db.String(80), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+
+with app.app_context():
+    db.create_all()
 
 @app.route("/") # декоратор, чтобы сообщить Flask, какой URL должен вызывать нашу функцию.
 def index():
@@ -27,34 +40,41 @@ def register():
     return render_template('register.html')
 
 
-@app.route('/register_handler', methods = ['POST']) # Напрямую связываемся с front, '/register_handler' - это обработчик(action) в register.html. С methods идентичная ситуация
+@app.route('/register_handler', methods = ['POST', 'GET']) # Напрямую связываемся с front, '/register_handler' - это обработчик(action) в register.html. С methods идентичная ситуация
 def reg_hand():
-    username = request.form['username'] #Здесь мы возвращаем данные полей переданной HTML-формы. То есть 'username' - это обращение к фронту(кнопка email)
-    password = request.form['password']
-    check_password = request.form['check_password']
-    print(username, password, check_password) # Это проверка, что запросы будут отображаться в консоли
-    if password == check_password:
-        db=SQLighter('data.db') # Обращение к базе данных, а именно к файлу models.py
-        db.add_user(username, password)
-        return redirect('/profile.html')
-        # return ' Получилось отправить'
-    else:
-          return redirect('/login.html')
-        #  return 'Не получилось отправить'
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        existing_user = User.query.filter_by(login=username).first()
+        if existing_user:
+            return "Ошибка: Такой пользователь уже есть!"
 
 
-@app.route('/login_handler', methods = ['POST'])
-def login_hand():
-    username = request.form['username']
-    password = request.form['password']
-    print(username, password)
+        new_user = User(login=username, password=generate_password_hash(password))
+        db.session.add(new_user)
+        db.session.commit()
 
-    db = SQLighter('data.db')
-
-    if db.autorize_user(username, password): #
-        return redirect('/profile.html')
-    else:
         return redirect('/login.html')
+
+
+@app.route('/login_handler', methods = ['POST', 'GET'])
+def login_hand():
+    if "username" in session:
+        return redirect('/profile.html')
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        user = User.query.filter_by(login=username).first()
+        if user and check_password_hash(user.password, password):
+            session['username'] = user.id
+            return redirect('/profile.html')
+
+        return 'Ошибка: Неверный логин или пароль!'
+
+    return render_template("login.html")
+
 
 
 if __name__ == '__main__': # Делаем так, чтобы у нас всё автоматически подтягивалось при изменении чего либо
